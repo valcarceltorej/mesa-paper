@@ -24,6 +24,7 @@ TICK_S = 10
 RUG_POR_TICK = 2
 LP_MIN = 90.0
 VOL_SAT = 250_000
+POOL_WORDS = ("amm", "pool", "bonding", "curve", "vault", "liquidity")
 EDADES = [900, 3600, 10800]
 HITOS = [3600, 10800]
 EDADES_DIAG = [90, 240]
@@ -139,20 +140,54 @@ def seguridad(mint):
     locks = [(x.get("lp") or {}).get("lpLockedPct") or 0 for x in markets]
     lock = max(locks, default=None)
     ths = rep.get("topHolders") or []
+    known = rep.get("knownAccounts")
+    known = known if isinstance(known, dict) else {}
+    if known and "known" not in MUESTRA:
+        MUESTRA["known"] = list(known.items())[:3]
+
+    def es_pool(h):
+        for a in (h.get("address"), h.get("owner")):
+            if a in known:
+                txt = json.dumps(known[a]).lower()
+                if any(w in txt for w in POOL_WORDS):
+                    return True
+        return False
+
+    reales = [h for h in ths if not es_pool(h)]
+    bruto = sum(float(h.get("pct") or 0) for h in ths[:10]) / 100
+    neto = sum(float(h.get("pct") or 0) for h in reales[:10]) / 100
+    peligro = [r.get("name") for r in riesgos
+               if (r.get("level") or "").lower() == "danger"]
+    otros = [n for n in peligro
+             if not any(w in (n or "").lower() for w in ("holder", "ownership"))]
     nombres = [(r.get("name") or "").lower() for r in riesgos]
     dev = bool(rep.get("rugged")) or any(
         "creator" in n and "rug" in n for n in nombres)
     return {
         "mint_revocado": revocada("mintAuthority"),
         "lp_bloqueado": None if lock is None else lock >= LP_MIN,
-        "top10": (sum(float(h.get("pct") or 0) for h in ths[:10]) / 100
-                  if ths else None),
+        "top10": neto if ths else None,
+        "top10_bruto": bruto if ths else None,
+        "n_pools": len(ths) - len(reales),
+        "riesgos_danger": peligro,
         "dev_en_rugs": dev,
         "freeze_activo": revocada("freezeAuthority") is False,
         "insiders": bool(rep.get("graphInsidersDetected"))
         or bool(rep.get("insiderNetworks")),
-        "riesgo_critico": any(
-            (r.get("level") or "").lower() == "danger" for r in riesgos)}
+        "riesgo_critico": bool(otros)}
+
+
+def valores(p):
+    def r(x):
+        return None if x is None else round(x, 3)
+
+    return {"vol": round(p.vol_1h), "top10": r(p.top10),
+            "top10_bruto": r(getattr(p, "top10_bruto", None)),
+            "pools": getattr(p, "n_pools", None),
+            "mint_rev": p.mint_revocado, "lp": p.lp_bloqueado,
+            "dev": p.dev_en_rugs, "freeze": getattr(p, "freeze_activo", None),
+            "insiders": getattr(p, "insiders", None),
+            "peligro": getattr(p, "riesgos_danger", None)}
 
 
 def correr_real(minutos):
@@ -175,9 +210,10 @@ def correr_real(minutos):
         v = filt.revisar(par)
         if not v.ok:
             log.log(t, "Filter", "descarte", mint=par.mint,
-                    motivos=v.motivos, etapa=etapa)
+                    motivos=v.motivos, etapa=etapa, valores=valores(par))
             return "descartado: " + v.motivos[0]
-        log.log(t, "Filter", "pasa", mint=par.mint, etapa=etapa)
+        log.log(t, "Filter", "pasa", mint=par.mint, etapa=etapa,
+                valores=valores(par))
         s = ana.puntuar(v)
         if s.score < M.R["score_min"]:
             log.log(t, "Analyst", "descarte", mint=par.mint, score=s.score,
@@ -223,6 +259,7 @@ def correr_real(minutos):
                 par = M.Par(w["mint"], "pumpfun", d["precio"], d["vol"],
                             None, None, None, None, d["mom"])
                 if d["vol"] >= M.R["vol_min"]:
+                    ST["con_volumen"] += 1
                     segur.append({"par": par, "intentos": 0, "etapa": e})
                 else:
                     evaluar(par, e)
@@ -294,18 +331,36 @@ def seguimiento(log):
     return L
 
 
+def embudo(log):
+    def n(ag, tp):
+        return sum(1 for e in log.eventos
+                   if e["agente"] == ag and e["tipo"] == tp)
+
+    return ["", "EMBUDO (de arriba abajo)",
+            "  tokens vistos:               %d" % ST["tokens_vistos"],
+            "  evaluaciones con precio:     %d" % ST["evaluaciones"],
+            "  con volumen >= 50k$:         %d" % ST["con_volumen"],
+            "  pasan filtros de seguridad:  %d" % n("Filter", "pasa"),
+            "  aprobados por el Analyst:    %d" % n("Analyst", "aprobado"),
+            "  compras simuladas:           %d" % n("Executor", "compra")]
+
+
 def cierre(c, log, hist, dia, estado):
     hist = hist or [M.R["saldo_inicial"]]
     with open("datos_mesa/equity_%s.csv" % dia, "w") as f:
         f.write("tick,equity\n" + "\n".join(
             "%d,%.2f" % (i, x) for i, x in enumerate(hist)))
     diag = ["", "DIAGNOSTICO", json.dumps(dict(ST)),
+            "known muestra: " + json.dumps(MUESTRA.get("known")),
             "websocket: " + str(estado.get("ws_error", "sin errores")),
             "rugcheck claves: " + json.dumps(MUESTRA.get("claves")),
             "rugcheck riesgos vistos: " + json.dumps(MUESTRA.get("riesgos")),
             "rugcheck holder0: " + json.dumps(MUESTRA.get("holder0"))]
-    out = "\n".join([M.resumen(c, log, hist)] + seguimiento(log) + diag)
+    cab = ["EJECUCION " + dia, ""]
+    out = "\n".join(cab + [M.resumen(c, log, hist)] + embudo(log)
+                    + seguimiento(log) + diag)
     open("datos_mesa/resumen_%s.md" % dia, "w", encoding="utf-8").write(out)
+    open("datos_mesa/ULTIMO_RESUMEN.md", "w", encoding="utf-8").write(out)
     log.f.flush()
     print(out, flush=True)
 
