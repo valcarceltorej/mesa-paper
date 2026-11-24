@@ -1,57 +1,64 @@
-EJECUCION 20261122_2240
+EJECUCION 20261123_2249
 
 RESUMEN
-Equity final: 957.79 (-4.2%)
-Max drawdown: -4.4%
-Pares vistos: 4905, pasan filtros: 11
-Operaciones cerradas: 4, ganadoras: 0
-Ganancia media: +0.0%, perdida media: -13.4%
+Equity final: 1006.07 (+0.6%)
+Max drawdown: -1.5%
+Pares vistos: 4822, pasan filtros: 14
+Operaciones cerradas: 1, ganadoras: 1
+Ganancia media: +7.6%, perdida media: +0.0%
 Motivos de descarte:
-   3390  volumen 1h < 50k$
-   1431  sin par en DexScreener
-     56  red de insiders detectada
-     48  riesgo critico segun RugCheck
-     42  top 10 holders > 20%
-     31  mint no revocado
+   4261  volumen 1h < 50k$
+    476  sin par en DexScreener
+     48  top 10 holders > 20%
+     45  red de insiders detectada
+     45  riesgo critico segun RugCheck
+     32  mint no revocado
+      9  freeze authority activo
       8  sin datos de seguridad (no se opera)
       5  dev vinculado a rugs
-      2  freeze authority activo
-      2  score 0.29 < 0.60
-      1  score 0.15 < 0.60
-      1  ya operado (no promediar a la baja)
-      1  score 0.41 < 0.60
-      1  score 0.31 < 0.60
-      1  score 0.35 < 0.60
+      2  LP no bloqueado
+      2  score 0.47 < 0.60
+      1  score 0.45 < 0.60
+      1  score 0.20 < 0.60
+      1  score 0.34 < 0.60
+      1  score 0.16 < 0.60
+      1  score 0.19 < 0.60
+      1  score 0.46 < 0.60
+      1  score 0.27 < 0.60
+      1  score 0.44 < 0.60
+      1  score 0.40 < 0.60
+      1  score 0.38 < 0.60
+      1  score 0.28 < 0.60
 
 EMBUDO (de arriba abajo)
-  tokens vistos:               2298
-  evaluaciones con precio:     3474
-  con volumen >= 50k$:         86
-  pasan filtros de seguridad:  11
-  aprobados por el Analyst:    5
-  compras simuladas:           4
+  tokens vistos:               2063
+  evaluaciones con precio:     4346
+  con volumen >= 50k$:         85
+  pasan filtros de seguridad:  14
+  aprobados por el Analyst:    1
+  compras simuladas:           1
 
 SEGUIMIENTO (que paso con los tokens que llegaron al analisis)
-  n= 30  media    +0%  mediana    +0%  descartado: mint no revocado  (a 60 min)
-  n= 18  media    -0%  mediana    +0%  descartado: mint no revocado  (a 180 min)
-  n= 11  media   -29%  mediana   -17%  descartado: red de insiders detectada  (a 60 min)
-  n=  7  media    +0%  mediana    +0%  descartado: sin datos de seguridad (no se opera)  (a 60 min)
-  n=  7  media   -38%  mediana   -43%  descartado: top 10 holders > 20%  (a 60 min)
-  n=  7  media   -22%  mediana   -12%  descartado: red de insiders detectada  (a 180 min)
-  n=  4  media   -98%  mediana   -99%  operado  (a 60 min)
-  n=  3  media   -43%  mediana   -42%  descartado: dev vinculado a rugs  (a 60 min)
-  n=  3  media    -0%  mediana    -0%  descartado: riesgo critico segun RugCheck  (a 60 min)
-  n=  2  media    +0%  mediana    +0%  descartado: sin datos de seguridad (no se opera)  (a 180 min)
-  n=  2  media   -59%  mediana   -59%  descartado: volumen 1h < 50k$  (a 60 min)
+  n= 27  media    +0%  mediana    +0%  descartado: mint no revocado  (a 60 min)
+  n= 17  media    -1%  mediana    -1%  descartado: mint no revocado  (a 180 min)
+  n= 16  media   +26%  mediana   -46%  descartado: top 10 holders > 20%  (a 60 min)
+  n=  8  media   -38%  mediana   -37%  descartado: score bajo  (a 60 min)
+  n=  7  media   +11%  mediana    -4%  descartado: red de insiders detectada  (a 60 min)
+  n=  6  media   -43%  mediana   -44%  descartado: score bajo  (a 180 min)
+  n=  5  media    -1%  mediana    -0%  descartado: sin datos de seguridad (no se opera)  (a 60 min)
+  n=  3  media   -31%  mediana   -46%  descartado: dev vinculado a rugs  (a 60 min)
+  n=  3  media   -20%  mediana   -17%  descartado: riesgo critico segun RugCheck  (a 60 min)
+  n=  3  media   -46%  mediana   -46%  descartado: top 10 holders > 20%  (a 180 min)
+  n=  3  media    -8%  mediana    -9%  descartado: red de insiders detectada  (a 180 min)
+  n=  2  media    -1%  mediana    -1%  descartado: sin datos de seguridad (no se opera)  (a 180 min)
+  n=  1  media   -99%  mediana   -99%  operado  (a 60 min)
   n=  1  media   -99%  mediana   -99%  operado  (a 180 min)
-  n=  1  media   -72%  mediana   -72%  descartado: score bajo  (a 60 min)
-  n=  1  media   -76%  mediana   -76%  descartado: dev vinculado a rugs  (a 180 min)
   sin datos de precio posterior: 0
 
 DIAGNOSTICO
-{"tokens_vistos": 2298, "evaluaciones": 3474, "con_volumen": 86, "rugcheck_llamadas": 86, "sin_par": 1431, "ws_reconexiones": 1}
-known muestra: [["1qR3JkkG7Sdr19YfoQWiZy9BzuKnApBJaTRaEz6RHGv", {"name": "Meteora DLMM Pool", "type": "AMM"}], ["21QrKaPkrcGhEk9rDzGqjGZ4wXh5TKWPxPioJWP5gCsa", {"name": "Meteora DLMM Pool", "type": "AMM"}], ["28h7R3mNfFENJPmRv2RtTypaaSncW9sCfVgpz1Gh2sVY", {"name": "Meteora DLMM Pool", "type": "AMM"}]]
+{"tokens_vistos": 2063, "evaluaciones": 4346, "con_volumen": 85, "rugcheck_llamadas": 85, "sin_par": 476, "ws_reconexiones": 3}
+known muestra: [["524ieQ6nM4GowhxLYDBRCcaGFBvFrpoKYmhoh4LudijF", {"name": "Printr Stake Pool", "type": "LOCKER"}], ["637VV4FHpynMec2StkVrqNrxyBG2bNqHdr54XToQgqGX", {"name": "Pump Fun", "type": "AMM"}], ["7ZgNzhrfqQFLSQTNQtC3CyidJpFXpSt8S1rXWjSxYe2u", {"name": "Creator", "type": "CREATOR"}]]
 websocket: no close frame received or sent
 rugcheck claves: ["creator", "creatorBalance", "creatorTokens", "deployPlatform", "detectedAt", "events", "fileMeta", "freezeAuthority", "graphInsidersDetected", "insiderNetworks", "knownAccounts", "launchpad", "lockerOwners", "lockerScanStatus", "lockers", "markets", "mint", "mintAuthority", "price", "risks", "rugged", "score", "score_normalised", "token", "tokenMeta", "tokenProgram", "tokenType", "token_extensions", "topHolders", "totalHolders", "totalLPProviders", "totalMarketLiquidity", "totalStableLiquidity", "transferFee", "validation", "verification"]
-rugcheck riesgos vistos: {"Mint Authority still enabled": "danger", "Single holder ownership": "warn", "High holder concentration": "warn", "Mutable metadata": "warn", "Low Liquidity": "warn", "Creator history of rugged tokens": "danger", "Permanent Control Enabled": "danger", "Freeze Authority still enabled": "danger", "Copycat token": "warn", "High holder correlation": "warn"}
-rugcheck holder0: {"address": "BUbXRWQyJa3L1guB4uEsW9VzF3faZBgFmswKS4LKiguZ", "amount": 173410018470399, "decimals": 9, "pct": 21.113965081376655, "uiAmount": 173410.018470399, "uiAmountString": "173410.018470399", "owner": "4yhXa4iERFGma3T1HMMjH8nJ8EdFqbahCV5Yomm8Z3do", "insider": false}
+rugcheck riesgos vistos: {"Low Liquidity": "danger", "Mint Authority still enabled": "danger", "Single holder ownership": "danger", "High holder concentration": "warn", "Mutable metadata": "warn", "Permanent Control Enabled": "danger", "Freeze Authority still enabled": "danger", "Large Amount of LP Unlocked": "danger", "Low amount of LP Providers": "warn", "Missing file metadata": "warn", "Creator history of rugged tokens": "danger"}
+rugcheck holder0: {"address": "3c5x4EkWu6J2jFeAALx8kaAznEU2RrA67KkLSYmT4zSH", "amount": 408838957793694, "decimals": 6, "pct": 40.88389577980166, "uiAmount": 408838957.793694, "uiAmountString": "408838957.793694", "owner": "637VV4FHpynMec2StkVrqNrxyBG2bNqHdr54XToQgqGX", "insider": false}
